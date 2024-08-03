@@ -28,7 +28,6 @@ function NavSearch() {
       setSearch("");
     }
   }, [searchParams.get("search")]);
-
   return (
     <Input
       type="search"
