@@ -11,10 +11,10 @@ function ProductsList({ products }: { products: Product[] }) {
       {products.map((product) => {
         const { name, price, image, company } = product;
         const dollarsAmount = formatCurrency(price);
-        const productID = product.id;
+        const productId = product.id;
         return (
-          <article key={productID} className="group relative">
-            <Link href={`/products/${productID}`}>
+          <article key={productId} className="group relative">
+            <Link href={`/products/${productId}`}>
               <Card className="transform group-hover:shadow-xl transition-shadow duration-500">
                 <CardContent className="p-8 gap-y-4 grid md:grid-cols-3">
                   <div className="relative h-64  md:h-48 md:w-48">
@@ -39,7 +39,7 @@ function ProductsList({ products }: { products: Product[] }) {
               </Card>
             </Link>
             <div className="absolute bottom-8 right-8 z-5">
-              <FavoriteToggleButton productID={productID} />
+              <FavoriteToggleButton productId={productId} />
             </div>
           </article>
         );
