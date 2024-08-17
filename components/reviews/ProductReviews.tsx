@@ -10,12 +10,13 @@ async function ProductReviews({ productId }: { productId: string }) {
       <SectionTitle text="Product Reviews" />
       <div className="grid md:grid-cols-2 gap-8 my-8">
         {reviews.map((review) => {
-          const { comment, rating, authorImageUrl, authorName } = review;
+          const { id, comment, rating, authorImageUrl, authorName } = review;
           const reviewInfo = {
             comment,
             rating,
             image: authorImageUrl,
             name: authorName,
+            id,
           };
           return <ReviewCard key={review.id} reviewInfo={reviewInfo} />;
         })}
