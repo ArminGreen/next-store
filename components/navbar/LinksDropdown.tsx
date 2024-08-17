@@ -46,6 +46,12 @@ function LinksDropdown() {
             if (link.label === "dashboard" && !isAdmin) {
               return null;
             }
+            if (
+              (link.label === "orders" || link.label === "reviews") &&
+              isAdmin
+            ) {
+              return null;
+            }
             return (
               <DropdownMenuItem key={link.label}>
                 <Link href={link.href} className="capitalize w-full">

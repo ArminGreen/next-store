@@ -1,15 +1,22 @@
 import FavoriteToggleButton from "@/components/products/FavoriteToggleButton";
+import ProductReviews from "@/components/reviews/ProductReviews";
+import SubmitReview from "@/components/reviews/SubmitReview";
 import AddToCart from "@/components/single-products/AddToCart";
 import BreadCrumbs from "@/components/single-products/BreadCrumbs";
 import ProductRating from "@/components/single-products/ProductRating";
-import { fetchSingleProduct } from "@/utils/actions";
+import ShareButton from "@/components/single-products/ShareButton";
+import { fetchSingleProduct, findExistingReviews } from "@/utils/actions";
 import { formatCurrency } from "@/utils/format";
+import { auth } from "@clerk/nextjs/server";
 import Image from "next/image";
 
 async function SingleProductPage({ params }: { params: { id: string } }) {
   const product = await fetchSingleProduct(params.id);
   const { name, price, company, description, image } = product;
   const dollarsAmount = formatCurrency(price);
+  const { userId } = auth();
+  const reviewDoesNotExist =
+    userId && !(await findExistingReviews(userId, params.id));
 
   return (
     <section>
@@ -30,17 +37,22 @@ async function SingleProductPage({ params }: { params: { id: string } }) {
         <div>
           <div className="flex gap-x-8 items-center">
             <h1 className="capitalize text-3xl font-bold">{name}</h1>
-            <FavoriteToggleButton productId={params.id} />
+            <div className="flex gap-x-2 items-center">
+              <FavoriteToggleButton productId={params.id} />
+              <ShareButton productId={params.id} name={name} />
+            </div>
           </div>
-          <ProductRating productID={params.id} />
+          <ProductRating productId={params.id} />
           <h4 className="text-xl mt-2">{company}</h4>
           <p className="mt-3 text-md bg-muted inline-block p-2 rounded-md">
             {dollarsAmount}
           </p>
           <p className="mt-6 leading-8 text-muted-foreground">{description}</p>
-          <AddToCart productID={params.id} />
+          <AddToCart productId={params.id} />
         </div>
       </div>
+      <ProductReviews productId={params.id} />
+      {reviewDoesNotExist && <SubmitReview productId={params.id} />}
     </section>
   );
 }
